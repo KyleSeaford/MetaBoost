@@ -21,5 +21,7 @@ from MetaBoost import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='Home')
+    path('', views.home, name='Home'),
+    path('login/', views.login_view, name='Login'),
+    path('signup/', views.signup_view, name='Signup'),
 ]
