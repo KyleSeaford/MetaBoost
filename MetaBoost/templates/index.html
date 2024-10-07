@@ -3,103 +3,141 @@
 <!DOCTYPE html> 
 <html lang="en">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>MetaBoost - Supercharge Your SEO</title>
-    <link rel="icon" href="{% static 'logo.svg' %}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .bg-purple {
-            background-color: #8B5CF6;
-        }
-
-        .bg-pink {
-            background-color: #EC4899;
-        }
-
-        .icon-purple {
-            color: #8B5CF6;
-        }
-
-        .icon-green {
-            color: #22C55E;
-        }
-
-        .gradient-bg {
-            background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
-        }
-
-        .feature-icon {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 20px;
-        }
-
-        .feature-card {
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-title {
-            color: #333;
-            font-weight: bold;
-        }
-
-        .features-section {
-            background-color: #F9FAFB;
-            padding: 60px 0;
-        }
-
-        .btn-primary {
-            background-color: #8B5CF6;
-            border: none;
-        }
-
-        .btn-primary:hover { 
-            background-color: #824efa
-        }
-
-        .btn-outline-primary {
-            border-color: #8B5CF6;
-            color: #8B5CF6;
-        }
-
-        .btn-outline-primary:hover {
-            border-color: #8B5CF6;
-            background-color: #824efa;
-        }
-
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 30px 0;
-        }
-
-        footer a {
-            color: #ccc;
-        }
-
-        footer a:hover {
-            color: white;
-        }
-
-        @media screen and (max-width: 768px) {
-            .navbar {
-                text-align: center;
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>MetaBoost - Supercharge Your SEO</title>
+        <link rel="icon" href="{% static 'logo.svg' %}" type="image/x-icon">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            .bg-purple {
+                background-color: #8B5CF6;
             }
-            
-        }
 
-    </style>
+            .bg-pink {
+                background-color: #EC4899;
+            }
 
+            .icon-purple {
+                color: #8B5CF6;
+            }
+
+            .icon-green {
+                color: #22C55E;
+            }
+
+            .gradient-bg {
+                background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 20px;
+            }
+
+            .feature-card {
+                background-color: #FFFFFF;
+                border-radius: 10px;
+                padding: 30px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-10px);
+            }
+
+            .feature-title {
+                color: #333;
+                font-weight: bold;
+            }
+
+            .features-section {
+                background-color: #F9FAFB;
+                padding: 60px 0;
+            }
+
+            .btn-primary {
+                background-color: #8B5CF6;
+                border: none;
+            }
+
+            .btn-primary:hover { 
+                background-color: #824efa;
+            }
+
+            .btn-outline-primary {
+                border-color: #8B5CF6;
+                color: #8B5CF6;
+            }
+
+            .btn-outline-primary:hover {
+                border-color: #8B5CF6;
+                background-color: #824efa;
+            }
+
+            footer {
+                background-color: #212529;
+                color: white;
+                padding: 30px 0;
+            }
+
+            footer a {
+                color: #ccc;
+            }
+
+            footer a:hover {
+                color: white;
+            }
+
+            /* Bouncing Animation */
+            @keyframes pingSmooth {
+                0%, 100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.2);
+                    opacity: 0.6; /* Less fading and smoother scale */
+                }
+            }
+
+            /* Scroll Down Arrow Styles */
+            .scroll-down-arrow {
+                animation: pingSmooth 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;;
+                margin-bottom: 30px; /* Adjust this value if the arrow is too close to the bottom */
+                z-index: 888; /* Ensure the arrow is on top of other elements */
+            }
+
+            @media screen and (max-width: 768px) {
+                .navbar {
+                    text-align: center;
+                }
+
+                .hero-section {
+                    text-align: center;
+                }
+
+                .hero-section h1, .hero-section p {
+                    text-align: center;
+                }
+
+                .hero-section .col-12 {
+                    justify-content: center;
+                }
+
+                .feature-card {
+                    margin-bottom: 30px; /* Add spacing between feature cards */
+                }
+
+                .hero-buttons {
+                    display: flex;
+                    justify-content: center;
+                    gap: 10px; /* Add spacing between buttons */
+                }
+            }
+        </style>
     </head>
 
     <body class="gradient-bg">
@@ -131,307 +169,318 @@
             </div>
         </header>
 
-
         <main>
-
-            <section class="container py-5 d-flex align-items-center" style="height: 100vh;">
-                <div class="col-md-6">
+            <!-- Hero Section -->
+            <section class="container py-5 d-flex flex-column-reverse flex-lg-row align-items-center justify-content-center hero-section position-relative" style="min-height: 100vh;">
+                <!-- Text Column -->
+                <div class="col-12 col-lg-6 mb-4 mb-lg-0 text-center text-lg-start">
                     <h1 class="display-4 fw-bold text-purple">Supercharge Your SEO with MetaBoost</h1>
                     <p class="lead text-muted mb-4">Automatically generate optimized meta tags for your HTML content and skyrocket your search engine rankings!</p>
-                    <div>
-                        <a href="#pricing" class="btn btn-primary btn-lg me-2">Get Started <i class="bi bi-arrow-right"></i></a>
-                        <a href="#features" class="btn btn-outline-primary btn-lg">Learn More</a>
+                    <div class="hero-buttons">
+                        <a href="#pricing" class="btn btn-primary btn-lg mb-2">Get Started <i class="bi bi-arrow-right"></i></a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg mb-2">Learn More</a>
                     </div>
                 </div>
-                <div class="col-md-6 text-center">
-                    <img src="{% static 'analysis.svg' %}" alt="code" width="500" height="500">
+                
+                <!-- Image Column (Hidden on Mobile) -->
+                <div class="col-12 col-lg-6 text-center d-none d-md-block">
+                    <img src="{% static 'analysis.svg' %}" alt="code" class="img-fluid" style="max-width: 100%; height: auto;">
                 </div>
+
+                <!-- Bouncing Arrow -->
+                <a href="#features" class="scroll-down-arrow position-absolute bottom-0 start-50 translate-middle-x text-decoration-none">
+                    <i class="bi bi-chevron-double-down text-purple" style="font-size: 2.5rem;"></i>
+                </a>
             </section>
 
-            <section id="features" class="features-section py-5 d-flex align-items-center" style="height: 100vh;">
+            <!-- Features Section -->
+            <section id="features" class="features-section d-flex align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="container text-center">
-                  <div class="row mb-5">
-                    <div class="col-12">
-                      <h2 class="h3 fw-bold text-purple">Unlock the Power of MetaBoost</h2>
-                      <p class="text-muted">MetaBoost simplifies SEO tasks to enhance your website's visibility online. Here's how it works:</p>
-                    </div>
-                  </div>
-                  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'analysis.svg' %}" alt="Analyze icon" class="feature-icon">
-                          <h5 class="feature-title">Analyze Your HTML</h5>
-                          <p class="card-text">Analyze your HTML quickly to understand what works and what can be improved.</p>
+                    <!-- Section Heading -->
+                    <div class="row mb-5 justify-content-center">
+                        <div class="col-12 col-md-8">
+                            <h2 class="h3 fw-bold text-purple">Unlock the Power of MetaBoost</h2>
+                            <p class="text-muted">MetaBoost simplifies SEO tasks to enhance your website's visibility online. Here's how it works:</p>
                         </div>
-                      </div>
                     </div>
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'lightbulb.svg' %}" alt="Meta Tags icon" class="feature-icon">
-                          <h5 class="feature-title">Generate Optimized Meta Tags</h5>
-                          <p class="card-text">Generate optimized meta tags with our AI, tailored to boost your content's relevance.</p>
+                    
+                    <!-- Features Cards -->
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'analysis.svg' %}" alt="Analyze icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Analyze Your HTML</h5>
+                                    <p class="card-text">Analyze your HTML quickly to understand what works and what can be improved.</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'seo.svg' %}" alt="SEO Game icon" class="feature-icon">
-                          <h5 class="feature-title">Elevate Your SEO Game</h5>
-                          <p class="card-text">Easily integrate meta tags and improve your SEO with actionable insights.</p>
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'lightbulb.svg' %}" alt="Meta Tags icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Generate Optimized Meta Tags</h5>
+                                    <p class="card-text">Generate optimized meta tags with our AI, tailored to boost your content's relevance.</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'secure.svg' %}" alt="Security icon" class="feature-icon">
-                          <h5 class="feature-title">Secure and Private</h5>
-                          <p class="card-text">Your privacy is our priority. We securely process your data to keep it safe.</p>
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'seo.svg' %}" alt="SEO Game icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Elevate Your SEO Game</h5>
+                                    <p class="card-text">Easily integrate meta tags and improve your SEO with actionable insights.</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'support.svg' %}" alt="Support icon" class="feature-icon">
-                          <h5 class="feature-title">Tailored Support</h5>
-                          <p class="card-text">Get support and personalized recommendations whenever you need them.</p>
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'secure.svg' %}" alt="Security icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Secure and Private</h5>
+                                    <p class="card-text">Your privacy is our priority. We securely process your data to keep it safe.</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col">
-                      <div class="card feature-card border-0">
-                        <div class="card-body">
-                          <img src="{% static 'progress.svg' %}" alt="Track icon" class="feature-icon">
-                          <h5 class="feature-title">Track Your Progress</h5>
-                          <p class="card-text">Track your SEO performance with advanced analytics and make data-driven adjustments.</p>
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'support.svg' %}" alt="Support icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Tailored Support</h5>
+                                    <p class="card-text">Get support and personalized recommendations whenever you need them.</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+                        <div class="col">
+                            <div class="card feature-card border-0 h-100">
+                                <div class="card-body">
+                                    <img src="{% static 'progress.svg' %}" alt="Track icon" class="feature-icon img-fluid">
+                                    <h5 class="feature-title">Track Your Progress</h5>
+                                    <p class="card-text">Track your SEO performance with advanced analytics and make data-driven adjustments.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                </div>
-            </section>
-            
+                </section>
 
-            <!-- Pricing Section -->
-            <section id="pricing" class="bsb-pricing-3 py-5 py-xl-8" style="height: 100vh;">
+                <!-- Pricing Section -->
+                <section id="pricing" class="bsb-pricing-3 py-5 py-xl-8 d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+                    <div class="container">
+                        <!-- Heading Section -->
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-md-10 col-lg-8 text-center">
+                                <h2 class="display-5 mb-5 mt-5">We offer simple pricing plans.</h2>
+                            </div>
+                        </div>
+
+                        <!-- Pricing Cards -->
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+                            <!-- Starter Plan -->
+                            <div class="col">
+                                <div class="card border-0 bg-light shadow-sm h-100">
+                                    <div class="card-body p-4 p-xxl-5 text-center">
+                                        <h2 class="h4 mb-2">Starter</h2>
+                                        <p class="text-secondary m-0">3 Webpages Per Month</p>
+                                        <hr class="my-4 border-dark-subtle">
+                                        <h4 class="display-4 fw-bold text-primary">Free</h4>
+                                        <p class="text-secondary m-0">GBP / Month</p>
+                                        <div class="d-grid gap-2 my-4">
+                                            <a href="/signup" class="btn btn-lg btn-outline-primary">Sign Up</a>
+                                        </div>
+                                        <ul class="list-group list-group-flush m-0">
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Ads</strong> Included
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>3</strong> Webpages / Month
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Community</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Email</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Priority & Live Chat</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Monthly</strong> Reports
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pro Plan -->
+                            <div class="col">
+                                <div class="card border-0 bg-white shadow-sm h-100 position-relative">
+                                    <span class="badge text-bg-warning position-absolute top-0 start-50 translate-middle">Most Popular</span>
+                                    <div class="card-body p-4 p-xxl-5 text-center">
+                                        <h2 class="h4 mb-2">Pro</h2>
+                                        <p class="text-secondary m-0">15 Webpages Per Month</p>
+                                        <hr class="my-4 border-dark-subtle">
+                                        <h4 class="display-4 fw-bold text-primary">£25</h4>
+                                        <p class="text-secondary m-0">GBP / Month</p>
+                                        <div class="d-grid gap-2 my-4">
+                                            <a href="#!" class="btn btn-lg btn-primary">Choose Plan</a>
+                                        </div>
+                                        <ul class="list-group list-group-flush m-0">
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Ads</strong> Included
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>15</strong> Webpages / Month
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Community</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Email</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Priority & Live Chat</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Monthly</strong> Reports
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Business Plan -->
+                            <div class="col">
+                                <div class="card border-0 bg-light shadow-sm h-100">
+                                    <div class="card-body p-4 p-xxl-5 text-center">
+                                        <h2 class="h4 mb-2">Business</h2>
+                                        <p class="text-secondary m-0">Unlimited Webpages Per Month</p>
+                                        <hr class="my-4 border-dark-subtle">
+                                        <h4 class="display-4 fw-bold text-primary">£150</h4>
+                                        <p class="text-secondary m-0">GBP / Month</p>
+                                        <div class="d-grid gap-2 my-4">
+                                            <a href="#!" class="btn btn-lg btn-outline-primary">Choose Plan</a>
+                                        </div>
+                                        <ul class="list-group list-group-flush m-0">
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                </svg>
+                                                <i class="bi bi-x text-danger"></i> <strong>Ads</strong> Included
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Unlimited</strong> Webpages / Month
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Community</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Email</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Priority & Live Chat</strong> Support
+                                            </li>
+                                            <li class="list-group-item bg-transparent">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
+                                                </svg>
+                                                <i class="bi bi-check text-success"></i> <strong>Monthly</strong> Reports
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+            </main>
+    
+            <!-- Footer -->
+            <footer>
                 <div class="container">
-                <div class="row justify-content-md-center">
-                    <div class="col-12 col-md-10 col-lg-8 col-xl-7">
-                    <h2 class="display-5 mb-5 mb-xl-9 text-center mt-5">We offer simple pricing plans.</h2>
-                    </div>
-                </div>
-                </div>
-            
-                <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                    <div class="container-fluid bg-light border pb-4 mt-md-6 shadow">
-                        <div class="row">
-                        <div class="col-12 col-md-4">
-                            <div class="card border-0 bg-transparent">
-                            <div class="card-body p-4 p-xxl-5">
-                                <h2 class="h4 mb-2">Starter</h2>
-                                <p class="text-secondary m-0">3 websites Per Month</p>
-                                <hr class="my-4 border-dark-subtle">
-                                <h4 class="display-3 fw-bold text-primary m-0">Free</h4>
-                                <p class="text-secondary m-0">GBP / Month</p>
-                                <div class="d-grid gap-2 my-4">
-                                <a href="#!" class="btn btn-lg btn-outline-primary">Sign Up</a>
-                                </div>
-                                <ul class="list-group list-group-flush m-0">
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                    </svg>
-                                    <span><strong>Ads</strong> Included</span>
-                                </li>
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                    </svg>
-                                    <span><strong>3</strong> Websites / Month</span>
-                                </li>
-                                
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                    </svg>
-                                    <span><strong>Community</strong> Support</span>
-                                </li>
-                        
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                    <span><strong>Email </strong>Support</span>
-                                </li>
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                    <span><strong>Priority & Live Chat</strong> Support</span>
-                                </li>
-                                <li class="list-group-item bg-transparent">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                    </svg>
-                                    <span><strong>Monthly</strong> Reports</span>
-                                </li>
-                                </ul>
-                            </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h5>About MetaBoost</h5>
+                            <p>MetaBoost analyzes HTML code provided by users and generates effective SEO meta tags to enhance the visibility and search engine ranking of the content.</p>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="card bg-white border-0 border-top pt-md-6 shadow-sm bsb-pricing-popular">
-                            <div class="card-body position-relative p-4 p-xxl-5">
-                                <span class="badge text-bg-warning position-absolute top-0 start-50 translate-middle">Most Popular</span>
-                                <h2 class="h4 mb-2">Pro</h2>
-                                <p class="text-secondary m-0">15 websites Per Month</p>
-                                <hr class="my-4 border-dark-subtle">
-                                <h4 class="display-3 fw-bold text-primary m-0">£25</h4>
-                                <p class="text-secondary m-0">GBP / Month</p>
-                                <div class="d-grid gap-2 my-4">
-                                <a href="#!" class="btn btn-lg btn-primary">Choose Plan</a>
-                                </div>
-                                <ul class="list-group list-group-flush m-0">
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                        </svg>
-                                        <span><strong>Ads</strong> Included</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>15</strong> Websites / Month</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Community</strong> Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Email </strong>Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                        </svg>
-                                        <span><strong>Priority & Live Chat</strong> Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                        </svg>
-                                        <span><strong>Monthly</strong> Reports</span>
-                                    </li>
-                                    </ul>
-                                </div>
-                            </div>
+    
+                        <div class="col-md-6 text-center">
+                            <h5>Quick Links</h5>
+                            <ul class="list-unstyled">
+                                <li><a href="#" style="text-decoration: none;">Home</a></li>
+                                <li><a href="#features" style="text-decoration: none;">Features</a></li>
+                                <li><a href="#pricing" style="text-decoration: none;">Pricing</a></li>
+                                <li><a href="#" style="text-decoration: none;">Legal Stuff</a></li>
+                            </ul>
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="card border-0 bg-transparent">
-                            <div class="card-body p-4 p-xxl-5">
-                                <h2 class="h4 mb-2">Business</h2>
-                                <p class="text-secondary m-0">Unlimited websites Per Month</p>
-                                <hr class="my-4 border-dark-subtle">
-                                <h4 class="display-3 fw-bold text-primary m-0">£150</h4>
-                                <p class="text-secondary m-0">GBP / Month</p>
-                                <div class="d-grid gap-2 my-4">
-                                <a href="#!" class="btn btn-lg btn-outline-primary">Choose Plan</a>
+    
+                        <div class="col-md-3">
+                            <h5>Stay Connected</h5>
+                            <p>And subscribe to improve your SEO</p>
+                            <form>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                                    <button class="btn btn-primary" type="submit">Subscribe</button>
                                 </div>
-                                <ul class="list-group list-group-flush m-0">
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x text-danger" viewBox="0 0 16 16">
-                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                        </svg>
-                                        <span><strong>Ads</strong> Included</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Unlimited</strong> Websites / Month</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                        <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Community</strong> Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Email </strong>Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Priority & Live Chat</strong> Support</span>
-                                    </li>
-                                    <li class="list-group-item bg-transparent">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
-                                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
-                                        </svg>
-                                        <span><strong>Monthly</strong> Reports</span>
-                                    </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                            </form>
                         </div>
                     </div>
-                    </div>
                 </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <h5>About MetaBoost</h5>
-                        <p>MetaBoosts analyzes HTML code provided by users and generate effective SEO meta tags to enhance the visibility and search engine ranking of the content.</p>
-                    </div>
-      
-                    <div class="col-md-6" style="text-align: center;">
-                        <h5>Quick Links</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#" style="text-decoration: none;">Home</a></li>
-                            <li><a href="#features" style="text-decoration: none;">Features</a></li>
-                            <li><a href="#pricing" style="text-decoration: none;">Pricing</a></li>
-                            <li><a href="#" style="text-decoration: none;">Legal Stuff</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-md-3" >
-                        <h5>Stay Connected</h5>
-                        <p>And subscribe to improve your SEO</p>
-                        <form>
-                            <div class="input-group">
-                                <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
-                                <button class="btn btn-primary" type="submit">Subscribe</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    </body>
-</html>
+            </footer>
+    
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        </body>
+    </html>
+    
