@@ -91,6 +91,13 @@
             color: white;
         }
 
+        @media screen and (max-width: 768px) {
+            .navbar {
+                text-align: center;
+            }
+            
+        }
+
     </style>
 
     </head>
@@ -98,17 +105,32 @@
     <body class="gradient-bg">
 
         <!-- Navbar -->
-        <header class="bg-white shadow-sm py-3" style="position: fixed; width: 100%; z-index: 999;">
-            <div class="container d-flex justify-content-between align-items-center">
-                <h1 class="h3"><a href="#" class="text-decoration-none" style="color: #212529;">MetaBoost</a></h1>
-                <nav>
-                    <a href="#features" class="text-muted me-3 text-decoration-none">Features</a>
-                    <a href="#pricing" class="text-muted me-3 text-decoration-none">Pricing</a>
-                    <a href="login" class="btn btn-outline-primary me-2">Log In</a>
-                    <a href="signup" class="btn btn-primary">Sign Up</a>
+        <header class="bg-white shadow-sm py-2" style="position: fixed; width: 100%; z-index: 999;">
+            <div class="container">
+                <nav class="navbar navbar-expand-md">
+                    <!-- Brand -->
+                    <h1 class="h3 mb-0">
+                        <a href="#" class="text-decoration-none" style="color: #212529;">MetaBoost</a>
+                    </h1>
+
+                    <!-- Toggler Button for Mobile -->
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <!-- Navbar Links -->
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <nav>
+                            <a href="#features" class="text-muted me-3 text-decoration-none">Features</a>
+                            <a href="#pricing" class="text-muted me-3 text-decoration-none">Pricing</a>
+                            <a href="login" class="btn btn-outline-primary me-2">Log In</a>
+                            <a href="signup" class="btn btn-primary">Sign Up</a>
+                        </nav>
+                    </div>
                 </nav>
             </div>
         </header>
+
 
         <main>
 
