@@ -14,9 +14,6 @@ def home(request):
     return render(request, 'index.html')
 
 def login_view(request):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect("/")
-    
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         if login_form.is_valid():

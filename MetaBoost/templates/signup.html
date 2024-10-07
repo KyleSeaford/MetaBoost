@@ -83,15 +83,15 @@
                             <form  method="post">
                                 <div class="mb-3">
                                     <label for="signupName" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="signupName" placeholder="Enter your username">
+                                    <input class="form-control" type="text" placeholder="Username" name="username" placeholder="Enter your username" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="signupEmail" class="form-label">Email address</label>
-                                    <input type="email" class="form-control" id="signupEmail" placeholder="Enter your email">
+                                    <input class="form-control" type="email" placeholder="Email" name="email" placeholder="Enter your email" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="signupPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="signupPassword" placeholder="Create a password">
+                                    <input class="form-control" type="password" placeholder="Password" name="password" placeholder="Create a password" required>
                                 </div>
                                 <div class="d-grid gap-2">
                                     {% csrf_token %} 

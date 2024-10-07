@@ -75,11 +75,11 @@
                             <form method="post">
                                 <div class="mb-3">
                                     <label for="loginUsername" class="form-label">Username</label>
-                                    <input type="Username" class="form-control" id="loginUsername" placeholder="Enter your username">
+                                    <input class="form-control" type="text" placeholder="Username" name="username" placeholder="Enter your username" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="loginPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password">
+                                    <input class="form-control" type="password" placeholder="Password" name="password" placeholder="Enter your password" required>
                                 </div>
                                 <div class="d-grid gap-2">
                                     {% csrf_token %} 
