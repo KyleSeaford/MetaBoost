@@ -13,14 +13,21 @@ from .forms import LoginForm, SignupForm
 def home(request):
     return render(request, 'index.html')
 
+def dash(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/")
+
+    return render(request, 'dash.html')
+
 def login_view(request):
+    
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             authenticated_user = authenticate(request, username=login_form.cleaned_data.get("username"), password=login_form.cleaned_data.get("password"))
             if authenticated_user is not None:
                 login(request=request, user=authenticated_user)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/dash")
 
 
     return render(request, 'login.html')
@@ -38,7 +45,7 @@ def signup_view(request):
             authenticated_user = authenticate(request, username=signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
             if authenticated_user is not None:
                 login(request=request, user=authenticated_user)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/dash")
 
     return render(request, 'signup.html')
 

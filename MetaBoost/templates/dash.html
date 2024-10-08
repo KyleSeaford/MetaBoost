@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .bg-purple {
+            background-color: #8B5CF6 !important;
+        }
+        .icon-purple {
+            color: #8B5CF6;
+        }
+        .gradient-bg {
+            background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
+        }
+        .feature-card {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .btn-primary {
+            background-color: #8B5CF6 !important;
+            border: none !important;
+        }
+        .btn-primary:hover { 
+            background-color: #824efa;
+        }
+        footer {
+            background-color: #212529;
+            color: white;
+            padding: 30px 0;
+        }
+        #drop-area {
+            border: 2px dashed #8B5CF6;
+            border-radius: 10px;
+            position: relative;
+        }
+        #drop-area.hover {
+            background-color: #f3f4f6;
+        }
+        .navbar-fixed {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+        }
+        .spinner-border {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+    <title>MetaBoost Dashboard</title>
+</head>
+
+<body class="gradient-bg">
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm py-2 navbar-fixed">
+        <div class="container">
+            <nav class="navbar navbar-expand-md">
+                <!-- Brand -->
+                <h1 class="h3 mb-0">
+                    <a href="/" class="text-decoration-none" style="color: #212529;">MetaBoost</a>
+                </h1>
+
+                <!-- Toggler Button for Mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar Links -->
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <nav>
+                        <a href="/#pricing" class="text-muted me-3 text-decoration-none">Upgrade Plan</a>
+                        <a href="support" class="text-muted me-3 text-decoration-none">Support</a>
+                        <a class="btn btn-primary" href="/logout" onclick="logout()">Sign Out</a>
+                    </nav>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mt-5 pt-5">
+        <div class="text-center mb-5">
+            <h1 class="text-dark">MetaBoost Dashboard</h1>
+            <p class="text-muted">Starter Plan - Analyze up to 3 webpages per month</p>
+            <p class="text-muted" id="page-count">Pages Analyzed: 0/3</p>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-8 mx-auto">
+                <div class="feature-card text-center">
+                    <h4 class="feature-title mb-4">Drag & Drop HTML File</h4>
+                    <div id="drop-area" class="border bg-light p-5 mb-4" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <p>Drag & drop your HTML file here or</p>
+                        <input type="file" id="fileElem" accept=".html" class="d-none" onchange="displayFileName()">
+                        <button class="btn btn-outline-primary btn-lg" onclick="document.getElementById('fileElem').click()">Browse File</button>
+                        <p id="file-name" class="mt-4 text-muted"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-8 mx-auto">
+                <div class="feature-card text-center">
+                    <h4 class="feature-title mb-4">Enter Website URL</h4>
+                    <input type="url" class="form-control mb-4" id="website-url" placeholder="Enter website URL">
+                    <button class="btn btn-primary btn-lg" onclick="analyzeUrl()">Analyze</button>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-primary" role="status" id="loading-spinner" style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="feature-card">
+                    <h4 class="feature-title mb-4">Generated Meta Tags</h4>
+                    <div id="meta-tags" class="bg-light p-5">
+                        <!-- Meta tags will be displayed here -->
+                        <p class="text-muted">No tags generated yet...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="feature-card">
+                    <h4 class="feature-title mb-4">Updated HTML Code</h4>
+                    <div id="updated-html" class="bg-light p-5">
+                        <!-- Updated HTML code will be displayed here -->
+                        <p class="text-muted">No code updated yet...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_KEY = 'app-FzMhLTq6tPcsK1LLJoqLJjwR';
+        let pagesAnalyzed = 0;
+
+        function analyzeUrl() {
+    const url = document.getElementById('website-url').value;
+    const spinner = document.getElementById('loading-spinner');
+
+    if (url && pagesAnalyzed < 3) {
+        spinner.style.display = 'block';
+
+        // Prepare the request payload with the required 'inputs' parameter
+        const payload = {
+            inputs: {
+                url: url // Include the URL in the 'inputs' parameter
+            },
+            query: "Analyze the given website for SEO meta tags",  // General query description
+            response_mode: "streaming",  // Use "streaming" for real-time updates
+            conversation_id: '',  // Optional: You can set this if you want to track conversations
+            user: 'Anonymous',  // Replace with dynamic user if needed
+            files: []
+        };
+
+        console.log('Request payload:', payload); // Log the payload for debugging
+
+        fetch('https://api.dify.ai/v1/chat-messages', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            console.log('Response status:', response.status); // Log response status for debugging
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+                });
+            }
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = '';
+
+            reader.read().then(function processText({ done, value }) {
+                if (done) {
+                    spinner.style.display = 'none';
+                    console.log('Stream complete');
+                    return;
+                }
+
+                // Decode and parse the stream data
+                buffer += decoder.decode(value, { stream: true });
+                let newlineIndex;
+
+                // Process each line of the stream
+                while ((newlineIndex = buffer.indexOf('\n')) >= 0) {
+                    const line = buffer.slice(0, newlineIndex).trim();
+                    buffer = buffer.slice(newlineIndex + 1);
+
+                    if (line) {
+                        try {
+                            const jsonData = JSON.parse(line);
+                            handleStreamedEvent(jsonData);
+                        } catch (e) {
+                            console.error('Failed to parse JSON:', line);
+                        }
+                    }
+                }
+
+                return reader.read().then(processText);
+            });
+        })
+        .catch(error => {
+            spinner.style.display = 'none';
+            alert(`Failed to analyze URL: ${error.message}`);
+        });
+            } else if (pagesAnalyzed >= 3) {
+                alert('You have reached the maximum number of pages for this month. Please upgrade your plan.');
+            } else {
+                alert('Please enter a valid URL');
+            }
+        }
+
+        // Handle each streamed event
+        function handleStreamedEvent(event) {
+            if (event.event === 'agent_thought') {
+                console.log('Agent is thinking:', event.thought);
+                document.getElementById('meta-tags').innerHTML += `<p class="text-warning">Agent thought: ${event.thought}</p>`;
+            } else if (event.event === 'agent_message') {
+                console.log('Agent message:', event);
+                document.getElementById('meta-tags').innerHTML += `<p class="text-success">Message: ${event.message}</p>`;
+            }
+        }
+
+
+
+
+        function displayFileName() {
+            const fileInput = document.getElementById('fileElem');
+            const fileName = fileInput.files[0] ? fileInput.files[0].name : '';
+            document.getElementById('file-name').textContent = fileName ? 'Selected file: ' + fileName : '';
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const dt = event.dataTransfer;
+            const files = dt.files;
+            if (files.length) {
+                document.getElementById('fileElem').files = files;
+                displayFileName();
+            }
+            document.getElementById('drop-area').classList.remove('hover');
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            document.getElementById('drop-area').classList.add('hover');
+        }
+
+        function handleDragLeave(event) {
+            document.getElementById('drop-area').classList.remove('hover');
+        }
+
+        function updatePageCount() {
+            document.getElementById('page-count').textContent = 'Pages Analyzed: ' + pagesAnalyzed + '/3';
+        }
+    </script>
+</body>
+</html>
