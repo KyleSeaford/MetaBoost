@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,58 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .bg-purple {
-            background-color: #8B5CF6 !important;
-        }
-        .icon-purple {
-            color: #8B5CF6;
-        }
-        .gradient-bg {
-            background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
-        }
-        .feature-card {
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-        .btn-primary {
-            background-color: #8B5CF6 !important;
-            border: none !important;
-        }
-        .btn-primary:hover { 
-            background-color: #824efa;
-        }
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 30px 0;
-        }
-        #drop-area {
-            border: 2px dashed #8B5CF6;
-            border-radius: 10px;
-            position: relative;
-        }
-        #drop-area.hover {
-            background-color: #f3f4f6;
-        }
-        .navbar-fixed {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 999;
-        }
-        .spinner-border {
-            display: none;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>MetaBoost Dashboard</title>
+    <link rel="icon" href="{% static 'logo.svg' %}" type="image/x-icon">
 </head>
 
 <body class="gradient-bg">
@@ -155,140 +108,6 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        let pagesAnalyzed = 0; // Counter for pages analyzed
-
-        function analyzeUrl() {
-            const url = document.getElementById('website-url').value;
-            const fileInput = document.getElementById('fileElem');
-
-            if (url) {
-                let htmlContent = '';
-
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0];
-                    const reader = new FileReader();
-
-                    reader.onload = function (event) {
-                        htmlContent = event.target.result;
-
-                        const payload = { url: url, html: htmlContent };
-
-                        fetch('/analyze-url/', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(payload)
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            displayAnalysisResults(data); // Display the updated HTML content
-                        })
-                        .catch(error => console.error('Error during fetch:', error));
-                    };
-
-                    reader.readAsText(file);
-                } else {
-                    const payload = { url: url };
-
-                    fetch('/analyze-url/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        displayAnalysisResults(data);
-                    })
-                    .catch(error => console.error('Error during fetch:', error));
-                }
-            } else {
-                console.log('Please enter a valid URL.');
-            }
-        }
-
-        function displayAnalysisResults(data) {
-            if (data.outputs && data.outputs.length > 0) {
-                const updatedHtml = data.outputs.length > 1 ? data.outputs[1] : '';
-
-                const updatedHtmlDiv = document.getElementById('updated-html');
-                if (updatedHtml) {
-                    updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>`;
-                } else {
-                    updatedHtmlDiv.innerHTML = '<p class="text-muted">No code updated yet...</p>';
-                }
-
-            } else if (data.message) {
-                document.getElementById('updated-html').textContent = data.message;
-            } else {
-                document.getElementById('updated-html').textContent = 'No outputs received from AI API.';
-            }
-        }
-
-        // Function to extract only the updated HTML from the AI output
-        function extractUpdatedHtml(output) {
-            const updatedHtmlMatch = output.match(/<html[^>]*>([\s\S]*?)<\/html>/); // Match content between <html> tags
-            return updatedHtmlMatch ? updatedHtmlMatch[0] : ''; // Return the matched HTML code
-        }
-
-        // Function to escape HTML special characters for displaying as plain text
-        function escapeHtml(unsafe) {
-            return unsafe
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
-        }
-
-        // Copy code function
-        function copyToClipboard(elementId) {
-            const contentElement = document.getElementById(elementId);
-            let content = contentElement.textContent || contentElement.innerText;
-
-            const tempTextArea = document.createElement("textarea");
-            tempTextArea.value = content;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempTextArea);
-
-            console.log('Copied to clipboard:');
-        }
-
-
-        function displayFileName() {
-            const fileInput = document.getElementById('fileElem');
-            const fileName = fileInput.files[0] ? fileInput.files[0].name : '';
-            document.getElementById('file-name').textContent = fileName ? 'Selected file: ' + fileName : '';
-        }
-
-        function handleDrop(event) {
-            event.preventDefault();
-            const dt = event.dataTransfer;
-            const files = dt.files;
-            if (files.length) {
-                document.getElementById('fileElem').files = files;
-                displayFileName();
-            }
-            document.getElementById('drop-area').classList.remove('hover');
-        }
-
-        function handleDragOver(event) {
-            event.preventDefault();
-            document.getElementById('drop-area').classList.add('hover');
-        }
-
-        function handleDragLeave(event) {
-            document.getElementById('drop-area').classList.remove('hover');
-        }
-
-        function updatePageCount() {
-            document.getElementById('page-count').textContent = 'Pages Analyzed: ' + pagesAnalyzed + '/3';
-        }
-    </script>
+    <script src="{% static 'dash.js' %}"></script>
 </body>
 </html>

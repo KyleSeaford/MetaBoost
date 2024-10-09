@@ -1,0 +1,229 @@
+.bg-purple {
+    background-color: #8B5CF6  !important;
+}
+
+.bg-pink {
+    background-color: #EC4899;
+}
+
+.icon-purple {
+    color: #8B5CF6;
+}
+
+.icon-green {
+    color: #22C55E;
+}
+
+.gradient-bg {
+    background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.feature-card {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-title {
+    color: #333;
+    font-weight: bold;
+}
+
+.features-section {
+    background-color: #F9FAFB;
+    padding: 60px 0;
+}
+
+.btn-primary {
+    background-color: #8B5CF6 !important;
+    border: none !important;
+}
+
+.btn-primary:hover { 
+    background-color: #824efa;
+}
+
+.btn-outline-primary {
+    border-color: #8B5CF6  !important;
+    color: #8B5CF6  !important;
+}
+
+.btn-outline-primary:hover {
+    border-color: #8B5CF6 !important ;
+    background-color: #824efa !important;
+    color: white !important;
+}
+
+footer {
+    background-color: #212529;
+    color: white;
+    padding: 30px 0;
+}
+
+footer a {
+    color: #ccc;
+}
+
+footer a:hover {
+    color: white;
+}
+
+/* Bouncing Animation */
+@keyframes pingSmooth {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6; /* Less fading and smoother scale */
+    }
+}
+
+/* Scroll Down Arrow Styles */
+.scroll-down-arrow {
+    animation: pingSmooth 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;;
+    margin-bottom: 30px; /* Adjust this value if the arrow is too close to the bottom */
+    z-index: 888; /* Ensure the arrow is on top of other elements */
+    color: #824efa  !important;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        text-align: center;
+    }
+
+    .hero-section {
+        text-align: center;
+    }
+
+    .hero-section h1, .hero-section p {
+        text-align: center;
+    }
+
+    .hero-section .col-12 {
+        justify-content: center;
+    }
+
+    .feature-card {
+        margin-bottom: 30px; /* Add spacing between feature cards */
+    }
+
+    .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Add spacing between buttons */
+    }
+}
+
+html::-webkit-scrollbar {
+    width: 6px;
+    height: 8px;
+    cursor: pointer;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #8B5CF6;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+html::-webkit-scrollbar-track {
+    background: #F9FAFB;
+}
+.gradient-bg {
+    background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
+}
+
+.bg-purple {
+    background-color: #8B5CF6  !important;
+}
+.btn-primary {
+    background-color: #8B5CF6  !important;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #824efa  !important;
+}
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-outline-primary {
+    border-color: #8B5CF6  !important;
+    color: #8B5CF6  !important;
+}
+
+.btn-outline-primary:hover {
+    border-color: #8B5CF6;
+    background-color: #824efa;
+}
+
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        text-align: center;
+    }
+}
+.bg-purple {
+    background-color: #8B5CF6 !important;
+}
+.icon-purple {
+    color: #8B5CF6;
+}
+.gradient-bg {
+    background: linear-gradient(to bottom, #FAF5FF, #FFE4E6);
+}
+.feature-card {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+.btn-primary {
+    background-color: #8B5CF6 !important;
+    border: none !important;
+}
+.btn-primary:hover { 
+    background-color: #824efa;
+}
+footer {
+    background-color: #212529;
+    color: white;
+    padding: 30px 0;
+}
+#drop-area {
+    border: 2px dashed #8B5CF6;
+    border-radius: 10px;
+    position: relative;
+}
+#drop-area.hover {
+    background-color: #f3f4f6;
+}
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+.spinner-border {
+    display: none;
+    margin-top: 20px;
+}
