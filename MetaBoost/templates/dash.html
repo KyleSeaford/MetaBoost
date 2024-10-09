@@ -162,10 +162,10 @@
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const reader = new FileReader();
-                    
-                    reader.onload = function(event) {
+
+                    reader.onload = function (event) {
                         htmlContent = event.target.result; // Read the file content
-                        
+
                         // Prepare the request payload
                         const payload = {
                             url: url,
@@ -180,41 +180,43 @@
                             },
                             body: JSON.stringify(payload)
                         })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Backend response:', data); // Log response from backend
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Backend response:', data); // Log response from backend
 
-                            // Check if there are outputs
-                            if (data.outputs && data.outputs.length > 0) {
-                                // Display the first thought in 'meta-tags' div
-                                const metaTagsDiv = document.getElementById('meta-tags');
-                                metaTagsDiv.innerHTML = data.outputs[0] || '<p class="text-muted">No tags generated yet...</p>';
+                                // Check if there are outputs
+                                if (data.outputs && data.outputs.length > 0) {
+                                    // Extract only the meta tags from the first output
+                                    const firstOutput = data.outputs[0];
+                                    const metaTags = extractMetaTags(firstOutput); // Call function to extract meta tags
 
-                                // Display the second thought in 'updated-html' div (if it exists)
-                                const updatedHtmlDiv = document.getElementById('updated-html');
-                                if (data.outputs.length > 1) {
-                                    updatedHtmlDiv.innerHTML = data.outputs[1]; // Use the second thought
+                                    // Extract only the updated HTML content from the second output
+                                    const secondOutput = data.outputs.length > 1 ? data.outputs[1] : '';
+                                    const updatedHtml = extractUpdatedHtml(secondOutput); // Call function to extract updated HTML
+
+                                    // Place the extracted meta tags into the 'meta-tags' div as escaped code
+                                    const metaTagsDiv = document.getElementById('meta-tags');
+                                    metaTagsDiv.innerHTML = `<pre><code>${escapeHtml(metaTags)}</code></pre>` || '<p class="text-muted">No tags generated yet...</p>';
+
+                                    // Place the extracted updated HTML content into the 'updated-html' div as escaped code
+                                    const updatedHtmlDiv = document.getElementById('updated-html');
+                                    updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>` || '<p class="text-muted">No code updated yet...</p>';
+
+                                    // Additional logging for debugging
+                                    console.log("Extracted Meta Tags:", metaTags);
+                                    console.log("Extracted Updated HTML:", updatedHtml);
+
+                                } else if (data.message) {
+                                    document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
+                                    document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
                                 } else {
-                                    updatedHtmlDiv.innerHTML = '<p class="text-muted">No code updated yet...</p>'; // Fallback message
+                                    document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
+                                    document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
                                 }
-
-                                // Additional logging for debugging
-                                console.log("First Collected Thought (Meta Tags):", data.outputs[0]);
-                                if (data.outputs.length > 1) {
-                                    console.log("Second Collected Thought (Updated HTML):", data.outputs[1]);
-                                }
-
-                            } else if (data.message) {
-                                document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
-                                document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
-                            } else {
-                                document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
-                                document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error during fetch:', error); // Log any errors
-                        });
+                            })
+                            .catch(error => {
+                                console.error('Error during fetch:', error); // Log any errors
+                            });
                     };
 
                     reader.readAsText(file); // Read the file as text
@@ -229,47 +231,72 @@
                         },
                         body: JSON.stringify(payload)
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Backend response:', data); // Log response from backend
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Backend response:', data); // Log response from backend
 
-                        // Check if there are outputs
-                        if (data.outputs && data.outputs.length > 0) {
-                            // Display the first thought in 'meta-tags' div
-                            const metaTagsDiv = document.getElementById('meta-tags');
-                            metaTagsDiv.innerHTML = data.outputs[0] || '<p class="text-muted">No tags generated yet...</p>';
+                            // Check if there are outputs
+                            if (data.outputs && data.outputs.length > 0) {
+                                // Extract only the meta tags from the first output
+                                const firstOutput = data.outputs[0];
+                                const metaTags = extractMetaTags(firstOutput); // Call function to extract meta tags
 
-                            // Display the second thought in 'updated-html' div (if it exists)
-                            const updatedHtmlDiv = document.getElementById('updated-html');
-                            if (data.outputs.length > 1) {
-                                updatedHtmlDiv.innerHTML = data.outputs[1]; // Use the second thought
+                                // Extract only the updated HTML content from the second output
+                                const secondOutput = data.outputs.length > 1 ? data.outputs[1] : '';
+                                const updatedHtml = extractUpdatedHtml(secondOutput); // Call function to extract updated HTML
+
+                                // Place the extracted meta tags into the 'meta-tags' div as escaped code
+                                const metaTagsDiv = document.getElementById('meta-tags');
+                                metaTagsDiv.innerHTML = `<pre><code>${escapeHtml(metaTags)}</code></pre>` || '<p class="text-muted">No tags generated yet...</p>';
+
+                                // Place the extracted updated HTML content into the 'updated-html' div as escaped code
+                                const updatedHtmlDiv = document.getElementById('updated-html');
+                                updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>` || '<p class="text-muted">No code updated yet...</p>';
+
+                                // Additional logging for debugging
+                                console.log("Extracted Meta Tags:", metaTags);
+                                console.log("Extracted Updated HTML:", updatedHtml);
+
+                            } else if (data.message) {
+                                document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
+                                document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
                             } else {
-                                updatedHtmlDiv.innerHTML = '<p class="text-muted">No code updated yet...</p>'; // Fallback message
+                                document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
+                                document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
                             }
-
-                            // Additional logging for debugging
-                            console.log("First Collected Thought (Meta Tags):", data.outputs[0]);
-                            if (data.outputs.length > 1) {
-                                console.log("Second Collected Thought (Updated HTML):", data.outputs[1]);
-                            }
-
-                        } else if (data.message) {
-                            document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
-                            document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
-                        } else {
-                            document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
-                            document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error during fetch:', error); // Log any errors
-                    });
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error); // Log any errors
+                        });
                 }
             } else {
                 console.log('Please enter a valid URL.'); // Log if URL is not entered
             }
         }
 
+        // Function to extract only meta tags from the AI output
+        function extractMetaTags(output) {
+            // Use regular expression or string methods to extract only <meta> tags from the output
+            const metaTags = output.match(/<meta[^>]*>/g); // Match all <meta> tags in the output
+            return metaTags ? metaTags.join('\n') : ''; // Join them with a newline
+        }
+
+        // Function to extract only the updated HTML from the AI output
+        function extractUpdatedHtml(output) {
+            // Use regular expression or string methods to extract only the updated HTML
+            const updatedHtmlMatch = output.match(/<html[^>]*>([\s\S]*?)<\/html>/); // Match content between <html> tags
+            return updatedHtmlMatch ? updatedHtmlMatch[0] : ''; // Return the matched HTML code
+        }
+
+        // Function to escape HTML special characters
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
 
         function displayFileName() {
             const fileInput = document.getElementById('fileElem');
