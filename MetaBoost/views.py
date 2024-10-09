@@ -27,7 +27,7 @@ def login_view(request):
             authenticated_user = authenticate(request, username=login_form.cleaned_data.get("username"), password=login_form.cleaned_data.get("password"))
             if authenticated_user is not None:
                 login(request=request, user=authenticated_user)
-            return HttpResponseRedirect("/dash")
+            return HttpResponseRedirect("/dashboard")
 
 
     return render(request, 'login.html')
@@ -45,7 +45,7 @@ def signup_view(request):
             authenticated_user = authenticate(request, username=signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
             if authenticated_user is not None:
                 login(request=request, user=authenticated_user)
-            return HttpResponseRedirect("/dash")
+            return HttpResponseRedirect("/dashboard")
 
     return render(request, 'signup.html')
 
