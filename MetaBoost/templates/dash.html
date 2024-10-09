@@ -122,22 +122,27 @@
             </div>
         </div>
         
-        <div class="row mb-5">
+        <!-- <div class="row mb-5">
             <div class="col-md-12">
                 <div class="feature-card">
-                    <h4 class="feature-title mb-4">Generated Meta Tags</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="feature-title">Generated Meta Tags</h4>
+                        <button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard('meta-tags')">Copy</button>
+                    </div>
                     <div id="meta-tags" class="bg-light p-5">
-                        <!-- Meta tags will be displayed here -->
                         <p class="text-muted">No tags generated yet...</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         
         <div class="row mb-5">
             <div class="col-md-12">
                 <div class="feature-card">
-                    <h4 class="feature-title mb-4">Updated HTML Code</h4>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4 class="feature-title">Updated HTML Code</h4>
+                        <button class="btn btn-sm btn-outline-primary" onclick="copyToClipboard('updated-html')">Copy</button>
+                    </div>
                     <div id="updated-html" class="bg-light p-5">
                         <!-- Updated HTML code will be displayed here -->
                         <p class="text-muted">No code updated yet...</p>
@@ -146,6 +151,7 @@
             </div>
         </div>
         
+        
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
@@ -153,8 +159,8 @@
         let pagesAnalyzed = 0; // Counter for pages analyzed
 
         function analyzeUrl() {
-            const url = document.getElementById('website-url').value; // Get the URL input
-            const fileInput = document.getElementById('fileElem'); // Get the file input
+            const url = document.getElementById('website-url').value;
+            const fileInput = document.getElementById('fileElem');
 
             if (url) {
                 let htmlContent = '';
@@ -164,15 +170,10 @@
                     const reader = new FileReader();
 
                     reader.onload = function (event) {
-                        htmlContent = event.target.result; // Read the file content
+                        htmlContent = event.target.result;
 
-                        // Prepare the request payload
-                        const payload = {
-                            url: url,
-                            html: htmlContent
-                        };
+                        const payload = { url: url, html: htmlContent };
 
-                        // Send POST request to Django backend
                         fetch('/analyze-url/', {
                             method: 'POST',
                             headers: {
@@ -180,48 +181,15 @@
                             },
                             body: JSON.stringify(payload)
                         })
-                            .then(response => response.json())
-                            .then(data => {
-                                console.log('Backend response:', data); // Log response from backend
-
-                                // Check if there are outputs
-                                if (data.outputs && data.outputs.length > 0) {
-                                    // Extract only the meta tags from the first output
-                                    const firstOutput = data.outputs[0];
-                                    const metaTags = extractMetaTags(firstOutput); // Call function to extract meta tags
-
-                                    // Extract only the updated HTML content from the second output
-                                    const secondOutput = data.outputs.length > 1 ? data.outputs[1] : '';
-                                    const updatedHtml = extractUpdatedHtml(secondOutput); // Call function to extract updated HTML
-
-                                    // Place the extracted meta tags into the 'meta-tags' div as escaped code
-                                    const metaTagsDiv = document.getElementById('meta-tags');
-                                    metaTagsDiv.innerHTML = `<pre><code>${escapeHtml(metaTags)}</code></pre>` || '<p class="text-muted">No tags generated yet...</p>';
-
-                                    // Place the extracted updated HTML content into the 'updated-html' div as escaped code
-                                    const updatedHtmlDiv = document.getElementById('updated-html');
-                                    updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>` || '<p class="text-muted">No code updated yet...</p>';
-
-                                    // Additional logging for debugging
-                                    console.log("Extracted Meta Tags:", metaTags);
-                                    console.log("Extracted Updated HTML:", updatedHtml);
-
-                                } else if (data.message) {
-                                    document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
-                                    document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
-                                } else {
-                                    document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
-                                    document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error during fetch:', error); // Log any errors
-                            });
+                        .then(response => response.json())
+                        .then(data => {
+                            displayAnalysisResults(data); // Display the updated HTML content
+                        })
+                        .catch(error => console.error('Error during fetch:', error));
                     };
 
-                    reader.readAsText(file); // Read the file as text
+                    reader.readAsText(file);
                 } else {
-                    // Send POST request without file content
                     const payload = { url: url };
 
                     fetch('/analyze-url/', {
@@ -231,64 +199,42 @@
                         },
                         body: JSON.stringify(payload)
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Backend response:', data); // Log response from backend
-
-                            // Check if there are outputs
-                            if (data.outputs && data.outputs.length > 0) {
-                                // Extract only the meta tags from the first output
-                                const firstOutput = data.outputs[0];
-                                const metaTags = extractMetaTags(firstOutput); // Call function to extract meta tags
-
-                                // Extract only the updated HTML content from the second output
-                                const secondOutput = data.outputs.length > 1 ? data.outputs[1] : '';
-                                const updatedHtml = extractUpdatedHtml(secondOutput); // Call function to extract updated HTML
-
-                                // Place the extracted meta tags into the 'meta-tags' div as escaped code
-                                const metaTagsDiv = document.getElementById('meta-tags');
-                                metaTagsDiv.innerHTML = `<pre><code>${escapeHtml(metaTags)}</code></pre>` || '<p class="text-muted">No tags generated yet...</p>';
-
-                                // Place the extracted updated HTML content into the 'updated-html' div as escaped code
-                                const updatedHtmlDiv = document.getElementById('updated-html');
-                                updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>` || '<p class="text-muted">No code updated yet...</p>';
-
-                                // Additional logging for debugging
-                                console.log("Extracted Meta Tags:", metaTags);
-                                console.log("Extracted Updated HTML:", updatedHtml);
-
-                            } else if (data.message) {
-                                document.getElementById('meta-tags').textContent = data.message; // Show any messages from the backend
-                                document.getElementById('updated-html').textContent = data.message; // Show same message in updated HTML section
-                            } else {
-                                document.getElementById('meta-tags').textContent = 'No outputs received from AI API.'; // Fallback message
-                                document.getElementById('updated-html').textContent = 'No outputs received from AI API.'; // Fallback message
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error during fetch:', error); // Log any errors
-                        });
+                    .then(response => response.json())
+                    .then(data => {
+                        displayAnalysisResults(data);
+                    })
+                    .catch(error => console.error('Error during fetch:', error));
                 }
             } else {
-                console.log('Please enter a valid URL.'); // Log if URL is not entered
+                console.log('Please enter a valid URL.');
             }
         }
 
-        // Function to extract only meta tags from the AI output
-        function extractMetaTags(output) {
-            // Use regular expression or string methods to extract only <meta> tags from the output
-            const metaTags = output.match(/<meta[^>]*>/g); // Match all <meta> tags in the output
-            return metaTags ? metaTags.join('\n') : ''; // Join them with a newline
+        function displayAnalysisResults(data) {
+            if (data.outputs && data.outputs.length > 0) {
+                const updatedHtml = data.outputs.length > 1 ? data.outputs[1] : '';
+
+                const updatedHtmlDiv = document.getElementById('updated-html');
+                if (updatedHtml) {
+                    updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>`;
+                } else {
+                    updatedHtmlDiv.innerHTML = '<p class="text-muted">No code updated yet...</p>';
+                }
+
+            } else if (data.message) {
+                document.getElementById('updated-html').textContent = data.message;
+            } else {
+                document.getElementById('updated-html').textContent = 'No outputs received from AI API.';
+            }
         }
 
         // Function to extract only the updated HTML from the AI output
         function extractUpdatedHtml(output) {
-            // Use regular expression or string methods to extract only the updated HTML
             const updatedHtmlMatch = output.match(/<html[^>]*>([\s\S]*?)<\/html>/); // Match content between <html> tags
             return updatedHtmlMatch ? updatedHtmlMatch[0] : ''; // Return the matched HTML code
         }
 
-        // Function to escape HTML special characters
+        // Function to escape HTML special characters for displaying as plain text
         function escapeHtml(unsafe) {
             return unsafe
                 .replace(/&/g, "&amp;")
@@ -297,6 +243,22 @@
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // Copy code function
+        function copyToClipboard(elementId) {
+            const contentElement = document.getElementById(elementId);
+            let content = contentElement.textContent || contentElement.innerText;
+
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = content;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+
+            console.log('Copied to clipboard:');
+        }
+
 
         function displayFileName() {
             const fileInput = document.getElementById('fileElem');

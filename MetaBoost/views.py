@@ -73,6 +73,8 @@ def analyze_url(request):
             url = data.get('url', '')
             html_content = data.get('html', '')
 
+            user = request.user  # Get the logged-in user
+
             # Print inputs for debugging
             print(f"URL Received: {url}")
             print(f"HTML Content Received: {html_content[:500]}")  # Print first 500 characters for reference
@@ -88,7 +90,7 @@ def analyze_url(request):
                 },
                 "query": f"URL: {url}, HTML: {html_content}",
                 "response_mode": "streaming",
-                "user": "Anonymous"
+                "user": user.username,  # Use the logged-in user's username
             }
 
             # Print the payload for debugging
