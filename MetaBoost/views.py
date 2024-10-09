@@ -22,9 +22,12 @@ from .forms import LoginForm, SignupForm
 def home(request):
     return render(request, 'index.html')
 
+def legal(request):
+    return render(request, 'legal.html')
+
 def dash(request):
     if not request.user.is_authenticated:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/login")
 
     return render(request, 'dash.html')
 
