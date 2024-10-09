@@ -149,102 +149,73 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API_KEY = 'app-FzMhLTq6tPcsK1LLJoqLJjwR';
-        let pagesAnalyzed = 0;
+        const API_KEY = 'app-FzMhLTq6tPcsK1LLJoqLJjwR'; // Your API key
+        let pagesAnalyzed = 0; // Counter for pages analyzed
 
         function analyzeUrl() {
-    const url = document.getElementById('website-url').value;
-    const spinner = document.getElementById('loading-spinner');
+            const url = document.getElementById('website-url').value; // Get the URL input
+            const fileInput = document.getElementById('fileElem'); // Get the file input
 
-    if (url && pagesAnalyzed < 3) {
-        spinner.style.display = 'block';
+            if (url) {
+                console.log('URL:', url); // Log the URL
 
-        // Prepare the request payload with the required 'inputs' parameter
-        const payload = {
-            inputs: {
-                url: url // Include the URL in the 'inputs' parameter
-            },
-            query: "Analyze the given website for SEO meta tags",  // General query description
-            response_mode: "streaming",  // Use "streaming" for real-time updates
-            conversation_id: '',  // Optional: You can set this if you want to track conversations
-            user: 'Anonymous',  // Replace with dynamic user if needed
-            files: []
-        };
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0]; // Get the selected file
+                    const reader = new FileReader();
 
-        console.log('Request payload:', payload); // Log the payload for debugging
+                    reader.onload = function(event) {
+                        const htmlContent = event.target.result; // Read the file content
+                        console.log('HTML Content:', htmlContent); // Log the HTML content
 
-        fetch('https://api.dify.ai/v1/chat-messages', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(response => {
-            console.log('Response status:', response.status); // Log response status for debugging
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
-                });
-            }
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder('utf-8');
-            let buffer = '';
+                        // Prepare the request payload
+                        const payload = {
+                            inputs: {
+                                url: url,
+                                html: htmlContent
+                            },
+                            query: `HTML: ${htmlContent}, URL: ${url}`,  // Construct the query
+                            response_mode: "streaming",  
+                            conversation_id: '',
+                            user: 'Anonymous',
+                            files: []
+                        };
 
-            reader.read().then(function processText({ done, value }) {
-                if (done) {
-                    spinner.style.display = 'none';
-                    console.log('Stream complete');
-                    return;
+                        console.log('Request payload:', payload); // Log the payload for debugging
+
+                        // Make the API request
+                        fetch('https://api.dify.ai/v1/chat-messages', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${API_KEY}`,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(payload)
+                        })
+                        .then(response => {
+                            console.log('Response status:', response.status); // Log response status
+                            return response.text(); // Read response as text
+                        })
+                        .then(data => {
+                            try {
+                                const jsonData = JSON.parse(data); // Attempt to parse as JSON
+                                console.log('Response data:', jsonData); // Log the parsed JSON data
+                            } catch (e) {
+                                console.log('Response data (not JSON):', data); // Log raw response if not JSON
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error); // Log any errors
+                        });
+                    };
+
+                    reader.readAsText(file); // Read the file as text
+                } else {
+                    console.log('No HTML file selected.'); // Log if no file is selected
                 }
-
-                // Decode and parse the stream data
-                buffer += decoder.decode(value, { stream: true });
-                let newlineIndex;
-
-                // Process each line of the stream
-                while ((newlineIndex = buffer.indexOf('\n')) >= 0) {
-                    const line = buffer.slice(0, newlineIndex).trim();
-                    buffer = buffer.slice(newlineIndex + 1);
-
-                    if (line) {
-                        try {
-                            const jsonData = JSON.parse(line);
-                            handleStreamedEvent(jsonData);
-                        } catch (e) {
-                            console.error('Failed to parse JSON:', line);
-                        }
-                    }
-                }
-
-                return reader.read().then(processText);
-            });
-        })
-        .catch(error => {
-            spinner.style.display = 'none';
-            alert(`Failed to analyze URL: ${error.message}`);
-        });
-            } else if (pagesAnalyzed >= 3) {
-                alert('You have reached the maximum number of pages for this month. Please upgrade your plan.');
             } else {
-                alert('Please enter a valid URL');
+                console.log('Please enter a valid URL.'); // Log if URL is not entered
             }
         }
-
-        // Handle each streamed event
-        function handleStreamedEvent(event) {
-            if (event.event === 'agent_thought') {
-                console.log('Agent is thinking:', event.thought);
-                document.getElementById('meta-tags').innerHTML += `<p class="text-warning">Agent thought: ${event.thought}</p>`;
-            } else if (event.event === 'agent_message') {
-                console.log('Agent message:', event);
-                document.getElementById('meta-tags').innerHTML += `<p class="text-success">Message: ${event.message}</p>`;
-            }
-        }
-
-
-
 
         function displayFileName() {
             const fileInput = document.getElementById('fileElem');
