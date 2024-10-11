@@ -7,6 +7,10 @@ function analyzeUrl() {
     if (url) {
         let htmlContent = '';
 
+        // Show modal and reset progress when analysis starts
+        toggleModal(true);
+        resetProgressBar();
+
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
             const reader = new FileReader();
@@ -15,6 +19,9 @@ function analyzeUrl() {
                 htmlContent = event.target.result;
 
                 const payload = { url: url, html: htmlContent };
+
+                // Simulate progress while fetching
+                simulateProgressBar();
 
                 fetch('/analyze-url/', {
                     method: 'POST',
@@ -25,14 +32,21 @@ function analyzeUrl() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    displayAnalysisResults(data); // Display the updated HTML content
+                    displayAnalysisResults(data);
                 })
-                .catch(error => console.error('Error during fetch:', error));
+                .catch(error => console.error('Error during fetch:', error))
+                .finally(() => {
+                    toggleModal(false); // Hide modal once analysis is complete
+                    resetProgressBar(); // Reset progress bar for future use
+                });
             };
 
             reader.readAsText(file);
         } else {
             const payload = { url: url };
+
+            // Simulate progress while fetching
+            simulateProgressBar();
 
             fetch('/analyze-url/', {
                 method: 'POST',
@@ -45,11 +59,53 @@ function analyzeUrl() {
             .then(data => {
                 displayAnalysisResults(data);
             })
-            .catch(error => console.error('Error during fetch:', error));
+            .catch(error => console.error('Error during fetch:', error))
+            .finally(() => {
+                toggleModal(false); // Hide modal once analysis is complete
+                resetProgressBar(); // Reset progress bar for future use
+            });
         }
     } else {
         console.log('Please enter a valid URL.');
     }
+}
+
+// Function to show or hide the modal
+function toggleModal(show) {
+    const modalElement = document.getElementById('analysisModal');
+    const analysisModal = bootstrap.Modal.getOrCreateInstance(modalElement); // Get or create a Bootstrap modal instance
+
+    if (show) {
+        analysisModal.show();
+    } else {
+        analysisModal.hide();
+    }
+}
+
+// Function to simulate progress of the progress bar
+function simulateProgressBar() {
+    const progressBar = document.getElementById('progress-bar');
+    let progress = 0;
+
+    const interval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute('aria-valuenow', progress);
+        progressBar.textContent = `${progress}%`;
+
+        // Stop progress at 90% until the real completion
+        if (progress >= 85) {
+            clearInterval(interval);
+        }
+    }, 600); // Update progress every 600 milliseconds
+}
+
+// Function to reset the progress bar
+function resetProgressBar() {
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.style.width = '0%';
+    progressBar.setAttribute('aria-valuenow', 0);
+    progressBar.textContent = '0%';
 }
 
 function displayAnalysisResults(data) {
