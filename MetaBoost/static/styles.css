@@ -227,3 +227,13 @@ footer {
     display: none;
     margin-top: 20px;
 }
+
+#updated-html pre {
+    white-space: pre-wrap; /* Ensures line breaks are preserved */
+    word-wrap: break-word; /* Prevents long strings from overflowing */
+    background-color: #f8f9fa; /* Light background */
+    padding: 5px; /* Padding around the code block */
+    border-radius: 5px; /* Rounded corners */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    font-size: 14px; /* Font size */
+}

@@ -53,37 +53,33 @@ function analyzeUrl() {
 }
 
 function displayAnalysisResults(data) {
+    const updatedHtmlDiv = document.getElementById('updated-html');
+    updatedHtmlDiv.innerHTML = ''; // Clear existing content
+
     if (data.outputs && data.outputs.length > 0) {
-        const updatedHtml = data.outputs.length > 1 ? data.outputs[1] : '';
+        let updatedHtml = data.outputs.length > 1 ? data.outputs[1] : '';
 
-        const updatedHtmlDiv = document.getElementById('updated-html');
-        if (updatedHtml) {
-            updatedHtmlDiv.innerHTML = `<pre><code>${escapeHtml(updatedHtml)}</code></pre>`;
-        } else {
-            updatedHtmlDiv.innerHTML = '<p class="text-muted">No code updated yet...</p>';
-        }
+        // Remove any pre-existing markdown or code formatting
+        updatedHtml = updatedHtml.replace(/<pre>|<\/pre>|<code>|<\/code>/g, '');
+        updatedHtml = updatedHtml.replace(/```html|```/g, '');
 
+        // Format the HTML to show properly in the <pre> and <code> tags
+        const formattedHtml = `<pre style="white-space: pre-wrap; font-family: monospace; font-size: 14px;"><code>${escapeHtml(updatedHtml)}</code></pre>`;
+        updatedHtmlDiv.innerHTML = formattedHtml;
     } else if (data.message) {
-        document.getElementById('updated-html').textContent = data.message;
+        updatedHtmlDiv.textContent = data.message;
     } else {
-        document.getElementById('updated-html').textContent = 'No outputs received from AI API.';
+        updatedHtmlDiv.textContent = 'No outputs received from AI API.';
     }
 }
 
-// Function to extract only the updated HTML from the AI output
-function extractUpdatedHtml(output) {
-    const updatedHtmlMatch = output.match(/<html[^>]*>([\s\S]*?)<\/html>/); // Match content between <html> tags
-    return updatedHtmlMatch ? updatedHtmlMatch[0] : ''; // Return the matched HTML code
-}
-
-// Function to escape HTML special characters for displaying as plain text
-function escapeHtml(unsafe) {
-    return unsafe
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+// Helper function to escape HTML special characters for proper display
+function escapeHtml(html) {
+    return html.replace(/&/g, "&amp;")
+               .replace(/</g, "&lt;")
+               .replace(/>/g, "&gt;")
+               .replace(/"/g, "&quot;")
+               .replace(/'/g, "&#039;");
 }
 
 // Copy code function
