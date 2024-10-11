@@ -93,11 +93,11 @@ function simulateProgressBar() {
         progressBar.setAttribute('aria-valuenow', progress);
         progressBar.textContent = `${progress}%`;
 
-        // Stop progress at 90% until the real completion
+        // Stop progress at 85% until the real completion
         if (progress >= 85) {
             clearInterval(interval);
         }
-    }, 600); // Update progress every 600 milliseconds
+    }, 1100); // Update progress every 1100 milliseconds
 }
 
 // Function to reset the progress bar
@@ -110,6 +110,13 @@ function resetProgressBar() {
 
 function displayAnalysisResults(data) {
     const updatedHtmlDiv = document.getElementById('updated-html');
+
+    // Check if the element with id "updated-html" exists
+    if (!updatedHtmlDiv) {
+        console.error("Element with id 'updated-html' not found.");
+        return; // Exit the function if the element is not found
+    }
+
     updatedHtmlDiv.innerHTML = ''; // Clear existing content
 
     if (data.outputs && data.outputs.length > 0) {
@@ -119,9 +126,18 @@ function displayAnalysisResults(data) {
         updatedHtml = updatedHtml.replace(/<pre>|<\/pre>|<code>|<\/code>/g, '');
         updatedHtml = updatedHtml.replace(/```html|```/g, '');
 
-        // Format the HTML to show properly in the <pre> and <code> tags
-        const formattedHtml = `<pre style="white-space: pre-wrap; font-family: monospace; font-size: 14px;"><code>${escapeHtml(updatedHtml)}</code></pre>`;
-        updatedHtmlDiv.innerHTML = formattedHtml;
+        // Display HTML inside the #updated-html div
+        updatedHtmlDiv.innerHTML = `<pre style="white-space: pre-wrap; font-family: monospace; font-size: 14px;"><code>${escapeHtml(updatedHtml)}</code></pre>`;
+
+        // Get the position of the updated HTML div
+        const rect = updatedHtmlDiv.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        // Adjust scroll position by a custom offset (e.g., 100px above the element)
+        window.scrollTo({
+            top: rect.top + scrollTop - 160, // Adjust this value based on your needs
+            behavior: 'smooth' // Smooth scrolling effect
+        });
     } else if (data.message) {
         updatedHtmlDiv.textContent = data.message;
     } else {

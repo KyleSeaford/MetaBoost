@@ -25,6 +25,12 @@ def home(request):
 def legal(request):
     return render(request, 'legal.html')
 
+def support(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect("/login")
+    
+    return render(request, 'support.html')
+
 def dash(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect("/login")

@@ -27,5 +27,6 @@ urlpatterns = [
     path('logout', views.signout_view, name='Logout'),
     path('dashboard/', views.dash, name='dash'),
     path('legal/', views.legal, name='legal'),
+    path('support/', views.support, name='support'),
     path('analyze-url/', views.analyze_url, name='analyze_url'),
 ]
