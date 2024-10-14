@@ -109,7 +109,7 @@ def analyze_url(request):
 
             # Set up headers for the API request
             headers = {
-                'Authorization': f'Bearer app-FzMhLTq6tPcsK1LLJoqLJjwR',
+                'Authorization': f'Bearer {API_KEY}',
                 'Content-Type': 'application/json'
             }
 
