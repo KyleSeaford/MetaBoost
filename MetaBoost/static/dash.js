@@ -73,7 +73,12 @@ function analyzeUrl() {
 // Function to show or hide the modal
 function toggleModal(show) {
     const modalElement = document.getElementById('analysisModal');
-    const analysisModal = bootstrap.Modal.getOrCreateInstance(modalElement); // Get or create a Bootstrap modal instance
+    
+    // Get or create a Bootstrap modal instance with 'static' backdrop and no keyboard closing
+    const analysisModal = bootstrap.Modal.getOrCreateInstance(modalElement, {
+        backdrop: 'static', // Prevent closing by clicking outside
+        keyboard: false     // Prevent closing with the escape key
+    });
 
     if (show) {
         analysisModal.show();
@@ -87,17 +92,31 @@ function simulateProgressBar() {
     const progressBar = document.getElementById('progress-bar');
     let progress = 0;
 
-    const interval = setInterval(() => {
-        progress += 10;
+    // Function to update progress before 85%
+    const fastInterval = setInterval(() => {
+        progress += 5;
         progressBar.style.width = `${progress}%`;
         progressBar.setAttribute('aria-valuenow', progress);
         progressBar.textContent = `${progress}%`;
 
-        // Stop progress at 85% until the real completion
+        // Stop the fast progress at 85% and switch to slower
         if (progress >= 85) {
-            clearInterval(interval);
+            clearInterval(fastInterval);
+
+            // slower progress after 85%
+            const slowInterval = setInterval(() => {
+                progress += 3;
+                progressBar.style.width = `${progress}%`;
+                progressBar.setAttribute('aria-valuenow', progress);
+                progressBar.textContent = `${progress}%`;
+
+                // Stop progress at 99%
+                if (progress >= 97) {
+                    clearInterval(slowInterval);
+                }
+            }, 2500); // Slower update every 2500 milliseconds
         }
-    }, 1100); // Update progress every 1100 milliseconds
+    }, 1500); // Fast update every 1500 milliseconds
 }
 
 // Function to reset the progress bar
