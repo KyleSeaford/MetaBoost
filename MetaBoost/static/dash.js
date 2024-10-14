@@ -1,15 +1,27 @@
-let pagesAnalyzed = 0; // Counter for pages analyzed
+// Update credits based on the data attribute passed from the backend
+let availableCredits = parseInt(document.getElementById('page-count').getAttribute('data-available-credits'), 10);
+
+function updatePageCount() {
+    // Assuming the maxCredits is 3 for a free plan
+    const maxCredits = 3; // You can set this dynamically based on user plan if needed
+    const pagesAnalyzed = maxCredits - availableCredits; // Calculate pages analyzed
+    document.getElementById('page-count').textContent = `Webpages Available: ${availableCredits}`;
+}
 
 function analyzeUrl() {
     const url = document.getElementById('website-url').value;
     const fileInput = document.getElementById('fileElem');
 
+    // Check if the user has enough credits
+    if (availableCredits <= 0) {
+        alert("You are out of credits. Please upgrade your plan or wait until next month for more credits.");
+        window.location.reload(); // Reload the page to prevent further analysis  
+        return; // Stop here if the user doesn't have enough credits
+    }
+
+    // Only proceed if the user has credits
     if (url) {
         let htmlContent = '';
-
-        // Show modal and reset progress when analysis starts
-        toggleModal(true);
-        resetProgressBar();
 
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
@@ -19,6 +31,10 @@ function analyzeUrl() {
                 htmlContent = event.target.result;
 
                 const payload = { url: url, html: htmlContent };
+
+                // Show modal and reset progress when analysis starts
+                toggleModal(true); // Prevent it from showing when credits are 0
+                resetProgressBar();
 
                 // Simulate progress while fetching
                 simulateProgressBar();
@@ -32,7 +48,14 @@ function analyzeUrl() {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    displayAnalysisResults(data);
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        displayAnalysisResults(data);
+                        // Deduct a credit and update the UI if analysis is successful
+                        availableCredits--;
+                        updatePageCount(); // Call this function to update the displayed credits
+                    }
                 })
                 .catch(error => console.error('Error during fetch:', error))
                 .finally(() => {
@@ -44,6 +67,10 @@ function analyzeUrl() {
             reader.readAsText(file);
         } else {
             const payload = { url: url };
+
+            // Show modal and reset progress when analysis starts
+            toggleModal(true); // Move this inside to prevent it from showing when credits are 0
+            resetProgressBar();
 
             // Simulate progress while fetching
             simulateProgressBar();
@@ -57,7 +84,14 @@ function analyzeUrl() {
             })
             .then(response => response.json())
             .then(data => {
-                displayAnalysisResults(data);
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    displayAnalysisResults(data);
+                    // Deduct a credit and update the UI if analysis is successful
+                    availableCredits--;
+                    updatePageCount(); // Call this function to update the displayed credits
+                }
             })
             .catch(error => console.error('Error during fetch:', error))
             .finally(() => {
@@ -213,8 +247,4 @@ function handleDragOver(event) {
 
 function handleDragLeave(event) {
     document.getElementById('drop-area').classList.remove('hover');
-}
-
-function updatePageCount() {
-    document.getElementById('page-count').textContent = 'Pages Analyzed: ' + pagesAnalyzed + '/3';
 }

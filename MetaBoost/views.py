@@ -32,11 +32,18 @@ def support(request):
     
     return render(request, 'support.html')
 
+@login_required
 def dash(request):
-    if not request.user.is_authenticated:
-        return HttpResponseRedirect("/login")
+    profile = request.user.profile  # Get the user's profile to access credits
+    credits = profile.credits       # Get the current number of credits
+    max_credits = 3 if profile.plan_type == 'free' else 15 if profile.plan_type == 'paid' else 'Unlimited'
+    
+    context = {
+        'credits': credits,
+        'max_credits': max_credits
+    }
 
-    return render(request, 'dash.html')
+    return render(request, 'dash.html', context)
 
 def login_view(request):
     if request.user.is_authenticated:
