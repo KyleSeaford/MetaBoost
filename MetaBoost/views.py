@@ -38,6 +38,9 @@ def dash(request):
     return render(request, 'dash.html')
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect("/dashboard")
+    
     if request.method == "POST":
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
@@ -49,6 +52,9 @@ def login_view(request):
     return render(request, 'login.html')
 
 def signup_view(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect("/dashboard")
+    
     if request.method == "POST":
         signup_form = SignupForm(request.POST)
         if signup_form.is_valid():
