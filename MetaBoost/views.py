@@ -90,6 +90,8 @@ def analyze_url(request):
 
             if not url:
                 return JsonResponse({'error': 'URL is required'}, status=400)
+            
+            print(API_KEY)
 
             # Construct the payload for the AI API request
             payload = {
@@ -107,7 +109,7 @@ def analyze_url(request):
 
             # Set up headers for the API request
             headers = {
-                'Authorization': f'Bearer {API_KEY}',
+                'Authorization': f'Bearer app-FzMhLTq6tPcsK1LLJoqLJjwR',
                 'Content-Type': 'application/json'
             }
 
