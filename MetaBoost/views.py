@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from .models import Profile
 from dotenv import load_dotenv
 import json
 import os
@@ -58,12 +59,24 @@ def signup_view(request):
     if request.method == "POST":
         signup_form = SignupForm(request.POST)
         if signup_form.is_valid():
-            if User.objects.filter(username = signup_form.cleaned_data.get("username")).first():
+            if User.objects.filter(username=signup_form.cleaned_data.get("username")).first():
                 return render(request, 'signup.html')
             
-            user = User.objects.create_user(signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
+            # Create a new user
+            user = User.objects.create_user(
+                username=signup_form.cleaned_data.get("username"), 
+                password=signup_form.cleaned_data.get("password")
+            )
 
-            authenticated_user = authenticate(request, username=signup_form.cleaned_data.get("username"), password=signup_form.cleaned_data.get("password"))
+            # Automatically create a profile with 3 credits (default for free users)
+            Profile.objects.create(user=user)
+
+            # Authenticate and log in the user
+            authenticated_user = authenticate(
+                request, 
+                username=signup_form.cleaned_data.get("username"), 
+                password=signup_form.cleaned_data.get("password")
+            )
             if authenticated_user is not None:
                 login(request=request, user=authenticated_user)
             return HttpResponseRedirect("/dashboard")
@@ -89,6 +102,11 @@ def analyze_url(request):
             html_content = data.get('html', '')
 
             user = request.user  # Get the logged-in user
+            profile = user.profile  # Access the user's profile to check credits
+
+            # Check if user has enough credits (unless on business plan)
+            if profile.plan_type != 'business' and profile.credits <= 0:
+                return JsonResponse({'error': 'Insufficient credits to perform this action.'}, status=403)
 
             # Print inputs for debugging
             print(f"URL Received: {url}")
@@ -96,8 +114,6 @@ def analyze_url(request):
 
             if not url:
                 return JsonResponse({'error': 'URL is required'}, status=400)
-            
-            print(API_KEY)
 
             # Construct the payload for the AI API request
             payload = {
@@ -143,6 +159,11 @@ def analyze_url(request):
 
                             except json.JSONDecodeError as e:
                                 print(f"Error decoding JSON: {e}")
+
+                # Deduct a credit only if the user is not on the business plan
+                if profile.plan_type != 'business':
+                    profile.credits -= 1
+                    profile.save()
 
                 # Return the collected thoughts as a JSON response
                 if collected_thoughts:
