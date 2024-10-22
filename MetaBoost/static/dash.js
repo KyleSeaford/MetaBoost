@@ -2,10 +2,16 @@
 let availableCredits = parseInt(document.getElementById('page-count').getAttribute('data-available-credits'), 10);
 
 function updatePageCount() {
-    // Assuming the maxCredits is 3 for a free plan
-    const maxCredits = 3; // You can set this dynamically based on user plan if needed
-    const pagesAnalyzed = maxCredits - availableCredits; // Calculate pages analyzed
-    document.getElementById('page-count').textContent = `Webpages Available: ${availableCredits}`;
+    const pageCountElement = document.getElementById('page-count');
+    let content = pageCountElement.textContent;
+
+    content = content.replace(`Webpages Available: `, '');
+
+    availableCredits = parseInt(content, 10);
+
+    availableCredits = availableCredits - 1;
+
+    pageCountElement.textContent = `Webpages Available: ${availableCredits}`;
 }
 
 function analyzeUrl() {
