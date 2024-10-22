@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from django.utils.decorators import method_decorator
+from asgiref.sync import sync_to_async  # For converting DB operations to async
 from .models import Profile
 from dotenv import load_dotenv
 import json
@@ -100,29 +102,27 @@ API_KEY = os.getenv('AI_API_KEY')
 API_URL = 'https://api.dify.ai/v1/chat-messages'  # Updated API URL
 
 @csrf_exempt
-def analyze_url(request):
+async def analyze_url(request):
     if request.method == 'POST':
         try:
-            # Parse the JSON request from the frontend
+            # Parse the JSON request
             data = json.loads(request.body)
             url = data.get('url', '')
             html_content = data.get('html', '')
 
-            user = request.user  # Get the logged-in user
-            profile = user.profile  # Access the user's profile to check credits
+            # Get user and profile asynchronously using sync_to_async
+            user = request.user
+            profile = await sync_to_async(lambda: user.profile)()
 
-            # Check if user has enough credits (unless on business plan)
+            # Check for credits
             if profile.plan_type != 'business' and profile.credits <= 0:
                 return JsonResponse({'error': 'Insufficient credits to perform this action.'}, status=403)
 
-            # Print inputs for debugging
-            print(f"URL Received: {url}")
-            print(f"HTML Content Received: {html_content[:500]}")  # Print first 500 characters for reference
-
+            # Validate URL input
             if not url:
                 return JsonResponse({'error': 'URL is required'}, status=400)
 
-            # Construct the payload for the AI API request
+            # Construct the payload for AI API
             payload = {
                 "inputs": {
                     "url": url,
@@ -130,11 +130,8 @@ def analyze_url(request):
                 },
                 "query": f"URL: {url}, HTML: {html_content}",
                 "response_mode": "streaming",
-                "user": user.username,  # Use the logged-in user's username
+                "user": user.username,
             }
-
-            # Print the payload for debugging
-            print(f"Payload Sent to AI API: {json.dumps(payload, indent=4)}")
 
             # Set up headers for the API request
             headers = {
@@ -142,45 +139,35 @@ def analyze_url(request):
                 'Content-Type': 'application/json'
             }
 
-            # Make the POST request to the AI API and stream the response
-            response = requests.post(API_URL, headers=headers, data=json.dumps(payload), stream=True)
+            # Asynchronously make the request to the AI API using sync_to_async
+            response = await sync_to_async(requests.post)(
+                API_URL, headers=headers, data=json.dumps(payload), stream=True
+            )
 
-            # Check if the response status is OK (status code 200)
+            # Process the response
             if response.status_code == 200:
-                collected_thoughts = []  # Store all thoughts here
+                collected_thoughts = []
                 for line in response.iter_lines():
                     if line:
                         decoded_line = line.decode('utf-8')
-                        print(f"Streamed Line: {decoded_line}")  # Print each streamed line for debugging
                         if decoded_line.startswith("data: "):
                             json_data = decoded_line[len("data: "):]
                             try:
                                 parsed_json = json.loads(json_data)
-                                print(f"Parsed JSON: {json.dumps(parsed_json, indent=4)}")  # Print parsed JSON for debugging
-                                
-                                # Check for 'thought' key in the response and collect it
                                 if 'thought' in parsed_json:
-                                    thought = parsed_json['thought']
-                                    print(f"Thought Collected: {thought}")  # Log the thought for debugging
-                                    collected_thoughts.append(thought)
+                                    collected_thoughts.append(parsed_json['thought'])
+                            except json.JSONDecodeError:
+                                pass
 
-                            except json.JSONDecodeError as e:
-                                print(f"Error decoding JSON: {e}")
-
-                # Deduct a credit only if the user is not on the business plan
+                # Deduct credits (if applicable) and save profile asynchronously
                 if profile.plan_type != 'business':
                     profile.credits -= 1
-                    profile.save()
+                    await sync_to_async(profile.save)()
 
-                # Return the collected thoughts as a JSON response
-                if collected_thoughts:
-                    return JsonResponse({'outputs': collected_thoughts}, status=200)
-                else:
-                    return JsonResponse({'message': 'No outputs were found in the stream.'}, status=200)
+                return JsonResponse({'outputs': collected_thoughts}, status=200) if collected_thoughts else JsonResponse({'message': 'No outputs found.'}, status=200)
             else:
-                # Return error message with response text if status is not 200
                 return JsonResponse({
-                    'error': f'Request to AI API failed with status code: {response.status_code}',
+                    'error': f'AI API failed with status code {response.status_code}',
                     'response': response.text
                 }, status=response.status_code)
 

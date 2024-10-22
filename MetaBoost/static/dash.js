@@ -14,7 +14,7 @@ function updatePageCount() {
     pageCountElement.textContent = `Webpages Available: ${availableCredits}`;
 }
 
-function analyzeUrl() {
+async function analyzeUrl() {
     const url = document.getElementById('website-url').value;
     const fileInput = document.getElementById('fileElem');
 
@@ -22,93 +22,68 @@ function analyzeUrl() {
     if (availableCredits <= 0) {
         alert("You are out of credits. Please upgrade your plan or wait until next month for more credits.");
         window.location.reload(); // Reload the page to prevent further analysis  
-        return; // Stop here if the user doesn't have enough credits
+        return;
     }
 
-    // Only proceed if the user has credits
-    if (url) {
-        let htmlContent = '';
-
-        if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-                htmlContent = event.target.result;
-
-                const payload = { url: url, html: htmlContent };
-
-                // Show modal and reset progress when analysis starts
-                toggleModal(true); // Prevent it from showing when credits are 0
-                resetProgressBar();
-
-                // Simulate progress while fetching
-                simulateProgressBar();
-
-                fetch('/analyze-url/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        alert(data.error);
-                    } else {
-                        displayAnalysisResults(data);
-                        // Deduct a credit and update the UI if analysis is successful
-                        availableCredits--;
-                        updatePageCount(); // Call this function to update the displayed credits
-                    }
-                })
-                .catch(error => console.error('Error during fetch:', error))
-                .finally(() => {
-                    toggleModal(false); // Hide modal once analysis is complete
-                    resetProgressBar(); // Reset progress bar for future use
-                });
-            };
-
-            reader.readAsText(file);
-        } else {
-            const payload = { url: url };
-
-            // Show modal and reset progress when analysis starts
-            toggleModal(true); // Move this inside to prevent it from showing when credits are 0
-            resetProgressBar();
-
-            // Simulate progress while fetching
-            simulateProgressBar();
-
-            fetch('/analyze-url/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    displayAnalysisResults(data);
-                    // Deduct a credit and update the UI if analysis is successful
-                    availableCredits--;
-                    updatePageCount(); // Call this function to update the displayed credits
-                }
-            })
-            .catch(error => console.error('Error during fetch:', error))
-            .finally(() => {
-                toggleModal(false); // Hide modal once analysis is complete
-                resetProgressBar(); // Reset progress bar for future use
-            });
-        }
-    } else {
+    // Only proceed if the user has a valid URL and credits
+    if (!url) {
         console.log('Please enter a valid URL.');
+        return;
+    }
+
+    let htmlContent = '';
+
+    // If a file is selected, read it as text
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        htmlContent = await readFileAsText(file); // Optimized with async/await
+    }
+
+    const payload = { url: url, html: htmlContent };
+
+    // Show modal and reset progress when analysis starts
+    toggleModal(true);
+    resetProgressBar();
+
+    // Simulate progress while fetching
+    simulateProgressBar();
+
+    try {
+        const response = await fetch('/analyze-url/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            alert(data.error);
+        } else {
+            displayAnalysisResults(data);
+            availableCredits--;
+            updatePageCount(); // Update the displayed credits
+        }
+    } catch (error) {
+        console.error('Error during fetch:', error);
+    } finally {
+        toggleModal(false); // Hide modal once analysis is complete
+        resetProgressBar(); // Reset progress bar for future use
     }
 }
+
+// Helper function for file reading
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+}
+
 
 // Function to show or hide the modal
 function toggleModal(show) {
@@ -132,31 +107,44 @@ function simulateProgressBar() {
     const progressBar = document.getElementById('progress-bar');
     let progress = 0;
 
-    // Function to update progress before 85%
-    const fastInterval = setInterval(() => {
+    // Function to update progress quickly up to 50%
+    const fastInterval1 = setInterval(() => {
         progress += 5;
         progressBar.style.width = `${progress}%`;
         progressBar.setAttribute('aria-valuenow', progress);
         progressBar.textContent = `${progress}%`;
 
-        // Stop the fast progress at 85% and switch to slower
-        if (progress >= 85) {
-            clearInterval(fastInterval);
+        // Stop the fast progress at 50% and switch to medium
+        if (progress >= 50) {
+            clearInterval(fastInterval1);
 
-            // slower progress after 85%
-            const slowInterval = setInterval(() => {
-                progress += 3;
+            // Medium progress after 50% to 85%
+            const fastInterval2 = setInterval(() => {
+                progress += 5;
                 progressBar.style.width = `${progress}%`;
                 progressBar.setAttribute('aria-valuenow', progress);
                 progressBar.textContent = `${progress}%`;
 
-                // Stop progress at 99%
-                if (progress >= 97) {
-                    clearInterval(slowInterval);
+                // Stop the medium progress at 85% and switch to slower
+                if (progress >= 85) {
+                    clearInterval(fastInterval2);
+
+                    // Slower progress after 85%
+                    const slowInterval = setInterval(() => {
+                        progress += 3;
+                        progressBar.style.width = `${progress}%`;
+                        progressBar.setAttribute('aria-valuenow', progress);
+                        progressBar.textContent = `${progress}%`;
+
+                        // Stop progress at 97%
+                        if (progress >= 97) {
+                            clearInterval(slowInterval);
+                        }
+                    }, 2500); // Slower update every 2500 milliseconds
                 }
-            }, 2500); // Slower update every 2500 milliseconds
+            }, 1500); // Medium update every 1500 milliseconds
         }
-    }, 1500); // Fast update every 1500 milliseconds
+    }, 1000); // Fast update every 1000 milliseconds
 }
 
 // Function to reset the progress bar
