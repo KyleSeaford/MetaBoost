@@ -14,41 +14,58 @@ function updatePageCount() {
     pageCountElement.textContent = `Webpages Available: ${availableCredits}`;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    let accountTypeElement = document.getElementById('account-type');
+    let planType = accountTypeElement.getAttribute('data-plan-type').toLowerCase();        
+
+    // Define the plan descriptions
+    let planDescriptions = {
+        'free': 'Free Plan - Analyze up to 3 webpages per month',
+        'paid': 'Paid Plan - Analyze up to 15 webpages per month',
+        'business': 'Business Plan - Analyze unlimited webpages per month'
+    };
+
+    // Update the content based on plan_type
+    if (planDescriptions[planType]) {
+        accountTypeElement.textContent = planDescriptions[planType];
+    } else {
+        accountTypeElement.textContent = 'Unknown Plan';
+    }
+});
+
 async function analyzeUrl() {
     const url = document.getElementById('website-url').value;
     const fileInput = document.getElementById('fileElem');
 
-    // Check if the user has enough credits
-    if (availableCredits <= 0) {
-        alert("You are out of credits. Please upgrade your plan or wait until next month for more credits.");
-        window.location.reload(); // Reload the page to prevent further analysis  
+    // Validate the URL
+    if (!isValidURL(url)) {
+        alert('Please enter a valid URL.');
         return;
     }
 
-    // Only proceed if the user has a valid URL and credits
-    if (!url) {
-        console.log('Please enter a valid URL.');
+    // Check if the user has enough credits on the frontend (optional, can be skipped to rely on backend)
+    if (availableCredits <= 0) {
+        alert("You are out of credits. Please upgrade your plan or wait until next month for more credits.");
+        window.location.reload(); // Reload the page to prevent further analysis
         return;
     }
 
     let htmlContent = '';
 
-    // If a file is selected, read it as text
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
-        htmlContent = await readFileAsText(file); // Optimized with async/await
+        htmlContent = await readFileAsText(file);
     }
 
     const payload = { url: url, html: htmlContent };
 
-    // Show modal and reset progress when analysis starts
+    // Show the modal and progress bar BEFORE making the API call
     toggleModal(true);
     resetProgressBar();
-
-    // Simulate progress while fetching
     simulateProgressBar();
 
     try {
+        // Send the request
         const response = await fetch('/analyze-url/', {
             method: 'POST',
             headers: {
@@ -58,6 +75,13 @@ async function analyzeUrl() {
         });
 
         const data = await response.json();
+
+        // Check for backend error (e.g., insufficient credits)
+        if (response.status === 403 && data.error === 'Insufficient credits to perform this action.') {
+            alert(data.error);
+            window.location.reload(); // Reload the page to prevent further analysis
+            return; // Do not show progress bar or modal
+        }
 
         if (data.error) {
             alert(data.error);
@@ -69,9 +93,19 @@ async function analyzeUrl() {
     } catch (error) {
         console.error('Error during fetch:', error);
     } finally {
-        toggleModal(false); // Hide modal once analysis is complete
-        resetProgressBar(); // Reset progress bar for future use
+        toggleModal(false); // Close the modal after the API call completes
     }
+}
+
+// Function to check if the entered URL is valid
+function isValidURL(url) {
+    const urlPattern = new RegExp('^(https?:\\/\\/)?' + // Protocol
+        '((([a-zA-Z0-9\\-]+\\.)+[a-zA-Z]{2,})|' + // Domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR IP (v4) address
+        '(\\:\\d+)?(\\/[-a-zA-Z0-9%_.~+]*)*' + // Port and path
+        '(\\?[;&a-zA-Z0-9%_.~+=-]*)?' + // Query string
+        '(\\#[-a-zA-Z0-9_]*)?$', 'i'); // Fragment locator
+    return !!urlPattern.test(url);
 }
 
 // Helper function for file reading

@@ -38,14 +38,17 @@ def support(request):
 def dash(request):
     profile = request.user.profile  # Get the user's profile to access credits
     credits = profile.credits       # Get the current number of credits
-    max_credits = 3 if profile.plan_type == 'free' else 15 if profile.plan_type == 'paid' else 'Unlimited'
+    plan_type = profile.plan_type   # Get the plan type (e.g., 'free', 'paid', 'business')
+    max_credits = 3 if plan_type == 'free' else 15 if plan_type == 'paid' else 'Unlimited'
     
     context = {
         'credits': credits,
-        'max_credits': max_credits
+        'max_credits': max_credits,
+        'plan_type': plan_type  # Pass the plan type to the context
     }
 
     return render(request, 'dash.html', context)
+
 
 def login_view(request):
     if request.user.is_authenticated:
