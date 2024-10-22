@@ -29,4 +29,11 @@ urlpatterns = [
     path('legal/', views.legal, name='legal'),
     path('support/', views.support, name='support'),
     path('analyze-url/', views.analyze_url, name='analyze_url'),
+
+    path('upgrade-to-paid/', views.upgrade_to_paid, name='upgrade_to_paid'),
+    path('upgrade-to-business/', views.upgrade_to_business, name='upgrade_to_business'),
+    path('payment-simulation/', views.payment_simulation, name='payment_simulation'),
+
+    path('revert-account/', views.revert_account, name='revert_account'),
+    path('delete-account/', views.delete_account, name='delete_account'),
 ]

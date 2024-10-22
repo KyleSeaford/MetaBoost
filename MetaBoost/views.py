@@ -95,6 +95,68 @@ def signup_view(request):
 
     return render(request, 'signup.html')
 
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib import messages
+
+@login_required
+def upgrade_to_paid(request):
+    # Update user plan to 'paid'
+    user = request.user
+    user.profile.plan_type = 'paid'
+
+    # Set 15 credits for the paid plan
+    user.profile.credits = 15
+    user.profile.save()
+
+    # Simulate redirect to payment page
+    messages.success(request, "You've chosen the Paid Plan. Please proceed to payment.")
+    return redirect('payment_simulation')
+
+@login_required
+def upgrade_to_business(request):
+    # Update user plan to 'business'
+    user = request.user
+    user.profile.plan_type = 'business'
+    
+    # Set unlimited credits (or use a large number, e.g., 10000 for simplicity)
+    user.profile.credits = float('100000000') 
+    user.profile.save()
+
+    # Simulate redirect to payment page
+    messages.success(request, "You've chosen the Business Plan. Please proceed to payment.")
+    return redirect('payment_simulation')
+
+def payment_simulation(request):
+    # A simple page simulating the payment process
+    return render(request, 'payment_simulation.html')
+
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def revert_account(request):
+    # Revert the user's plan to 'free'
+    user = request.user
+    user.profile.plan_type = 'free'
+    user.profile.credits = 3  # Reset credits to default for free plan
+    user.profile.save()
+
+    messages.success(request, "Your account has been reverted to the Free Plan.")
+    return redirect('/dashboard')  # Redirect to dashboard or any appropriate page
+
+@login_required
+def delete_account(request):
+    # Delete the user's account
+    user = request.user
+    user.delete()
+
+    messages.success(request, "Your account has been deleted.")
+    return redirect(' ')  # Redirect to the home page after deletion
+
 def signout_view(request):
     logout(request)
     return HttpResponseRedirect("/") 
