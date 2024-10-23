@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('upgrade-to-paid/', views.upgrade_to_paid, name='upgrade_to_paid'),
     path('upgrade-to-business/', views.upgrade_to_business, name='upgrade_to_business'),
+    path('buy-credits/', views.buy_credits, name='buy_credits'),
+
     path('payment-simulation/', views.payment_simulation, name='payment_simulation'),
 
     path('revert-account/', views.revert_account, name='revert_account'),

@@ -13,6 +13,9 @@ from django.utils.decorators import method_decorator
 from asgiref.sync import sync_to_async  # For converting DB operations to async
 from .models import Profile
 from dotenv import load_dotenv
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 import json
 import os
 import requests
@@ -96,11 +99,6 @@ def signup_view(request):
     return render(request, 'signup.html')
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib import messages
-
 @login_required
 def upgrade_to_paid(request):
     # Update user plan to 'paid'
@@ -128,6 +126,28 @@ def upgrade_to_business(request):
     # Simulate redirect to payment page
     messages.success(request, "You've chosen the Business Plan. Please proceed to payment.")
     return redirect('payment_simulation')
+
+@login_required
+def buy_credits(request):
+    if request.method == "POST":
+        # Get the number of credits entered by the user
+        credit_amount = int(request.POST.get('credit_amount', 0))
+        
+        if credit_amount <= 0:
+            messages.error(request, "Please enter a valid number of credits.")
+            return redirect('#pricing')
+
+        # Add the entered number of credits to the user's current credits for webpages
+        user = request.user
+        user.profile.credits += credit_amount
+        user.profile.save()
+
+        # Simulate redirect to payment page
+        messages.success(request, f"You've selected {credit_amount} webpage credits. Please proceed to payment.")
+        return redirect('payment_simulation')  # Redirect to the payment simulation page
+
+    # Redirect to pricing if accessed via GET (optional)
+    return redirect('#pricing')
 
 def payment_simulation(request):
     # A simple page simulating the payment process
